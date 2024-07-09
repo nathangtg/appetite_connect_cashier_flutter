@@ -1,3 +1,5 @@
+import 'package:appetite_connect_cashier/views/pages/menu_view.dart';
+import 'package:appetite_connect_cashier/views/pages/orders_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:appetite_connect_cashier/views/auth/login_view.dart';
@@ -38,16 +40,51 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginView(),
       },
       onGenerateRoute: (settings) {
-        if (settings.name != null &&
-            settings.name!.startsWith('/restaurants/')) {
-          final idStr = settings.name!.substring('/restaurants/'.length);
-          final id = int.tryParse(idStr);
-          if (id != null) {
+        if (settings.name != null) {
+          if (settings.name == '/orders') {
+            // Navigate to OrdersView with restaurantId provided
             return MaterialPageRoute(
-              builder: (context) => RestaurantsDetailed(id: id),
+              builder: (context) {
+                final int? restaurantId = settings.arguments as int?;
+                if (restaurantId != null) {
+                  return OrdersView(restaurantId: restaurantId);
+                } else {
+                  // Handle case where restaurantId is not available
+                  return const Scaffold(
+                    body: Center(
+                      child: Text('Restaurant ID not provided'),
+                    ),
+                  );
+                }
+              },
+            );
+          } else if (settings.name!.startsWith('/restaurants')) {
+            // Extract restaurantId from route path
+            final idStr = settings.name!.substring('/restaurants/'.length);
+            final id = int.tryParse(idStr);
+            if (id != null) {
+              return MaterialPageRoute(
+                builder: (context) => RestaurantsDetailed(id: id),
+              );
+            }
+          } else if (settings.name!.startsWith('/menus')) {
+            return MaterialPageRoute(
+              builder: (context) {
+                final int? restaurantId = settings.arguments as int?;
+                if (restaurantId != null) {
+                  return MenuView(restaurantId: restaurantId);
+                } else {
+                  return const Scaffold(
+                    body: Center(
+                      child: Text('Restaurant ID not provided'),
+                    ),
+                  );
+                }
+              },
             );
           }
         }
+        // Default route not found handling
         return MaterialPageRoute(
           builder: (context) => const Scaffold(
             body: Center(

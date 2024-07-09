@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
 
-class Sidebar extends StatefulWidget {
-  const Sidebar({Key? key}) : super(key: key);
+class Sidebar extends StatelessWidget {
+  final int restaurantId;
 
-  @override
-  State<Sidebar> createState() => _SidebarState();
-}
+  const Sidebar({Key? key, required this.restaurantId}) : super(key: key);
 
-class _SidebarState extends State<Sidebar> {
-  bool sidebarOpen = true;
-
-  void toggleSidebar() {
-    setState(() {
-      sidebarOpen = !sidebarOpen;
-    });
-  }
-
-  void redirectToDashboard() {
+  void redirectToDashboard(BuildContext context) {
     Navigator.pushNamed(context, '/home');
   }
 
-  void redirectToOrders() {
-    // Implement navigation to Orders
+  void redirectToOrders(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      '/orders',
+      arguments: restaurantId, // Pass restaurantId as arguments
+    );
   }
 
-  void redirectToRestaurant() {
-    // Implement navigation to Restaurant
+  void redirectToRestaurant(BuildContext context) {
+    Navigator.pushNamed(context, '/restaurants');
   }
 
-  void redirectToMenu() {
-    // Implement navigation to Menu
+  void redirectToMenu(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      '/menus',
+      arguments: restaurantId,
+    );
   }
 
-  void logout() {
-    // Implement logout functionality
+  void logout(BuildContext context) {
+    // Implement logout functionality, such as clearing session or navigating to login
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
   @override
@@ -50,7 +48,7 @@ class _SidebarState extends State<Sidebar> {
                 const SizedBox(height: 16),
                 const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: redirectToDashboard,
+                  onPressed: () => redirectToDashboard(context),
                   child: const Text('Go to Dashboard'),
                 ),
               ],
@@ -59,19 +57,19 @@ class _SidebarState extends State<Sidebar> {
           const Divider(),
           ListTile(
             title: const Text('Orders'),
-            onTap: redirectToOrders,
+            onTap: () => redirectToOrders(context),
           ),
           ListTile(
             title: const Text('Restaurant'),
-            onTap: redirectToRestaurant,
+            onTap: () => redirectToRestaurant(context),
           ),
           ListTile(
             title: const Text('Menu'),
-            onTap: redirectToMenu,
+            onTap: () => redirectToMenu(context),
           ),
           ListTile(
             title: const Text('Logout'),
-            onTap: logout,
+            onTap: () => logout(context),
           ),
         ],
       ),

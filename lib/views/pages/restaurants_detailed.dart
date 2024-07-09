@@ -21,7 +21,9 @@ class _RestaurantsDetailedState extends State<RestaurantsDetailed> {
         children: [
           SizedBox(
             width: 250,
-            child: Sidebar(),
+            child: Sidebar(
+              restaurantId: widget.id,
+            ),
           ),
           Expanded(
             child: Center(
