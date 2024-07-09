@@ -1,0 +1,5 @@
+{
+  "java.compile.nullAnalysis.mode": "automatic",
+  "cmake.configureOnOpen": true,
+  "FSharp.suggestGitignore": false
+}

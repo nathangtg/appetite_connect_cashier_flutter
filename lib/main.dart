@@ -1,7 +1,8 @@
-import 'package:appetite_connect_cashier/views/auth/login_view.dart';
-import 'package:appetite_connect_cashier/views/restaurants_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:appetite_connect_cashier/views/auth/login_view.dart';
+import 'package:appetite_connect_cashier/views/pages/restaurants_detailed.dart';
+import 'package:appetite_connect_cashier/views/pages/restaurants_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,8 +34,27 @@ class MyApp extends StatelessWidget {
         },
       ),
       routes: {
-        '/home': (context) =>
-            RestaurantsView(), // Register RestaurantsView route
+        '/home': (context) => const RestaurantsView(),
+        '/login': (context) => LoginView(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name != null &&
+            settings.name!.startsWith('/restaurants/')) {
+          final idStr = settings.name!.substring('/restaurants/'.length);
+          final id = int.tryParse(idStr);
+          if (id != null) {
+            return MaterialPageRoute(
+              builder: (context) => RestaurantsDetailed(id: id),
+            );
+          }
+        }
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(
+              child: Text('Route not found'),
+            ),
+          ),
+        );
       },
     );
   }
